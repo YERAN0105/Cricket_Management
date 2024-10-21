@@ -7,6 +7,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
 import java.util.Date;
+import java.util.List;
 
 @lombok.Getter
 @lombok.Setter
@@ -28,4 +29,7 @@ public class PlayerResponse {
     private String endDate;
     private String password;
     private String username;
+
+    // Add a list for 'under' values from the teams
+    private List<String> teamsUnder;
 }

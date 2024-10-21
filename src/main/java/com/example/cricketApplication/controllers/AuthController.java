@@ -54,6 +54,9 @@ public class AuthController {
     @Autowired
     MembershipRepository membershipRepository;
 
+    @Autowired
+    OfficialRepository officialRepository;
+
 
 //    @PostMapping("/signin")
 //    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
@@ -529,8 +532,58 @@ public class AuthController {
 
 
 
+    @PostMapping("/signupOfficial")
+    public ResponseEntity<?> registerOfficial(@Valid @RequestBody SignupRequest signUpRequest) {
+        // Check if the username already exists
+        if (userRepository.existsByUsername(signUpRequest.getUsername())) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("Error: Username is already taken!"));
+        }
 
+        // Check if the email already exists
+        if (userRepository.existsByEmail(signUpRequest.getEmail())) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("Error: Email is already in use!"));
+        }
+
+        // Create and set user entity
+        User newUser = new User();
+        newUser.setUsername(signUpRequest.getUsername());
+        newUser.setEmail(signUpRequest.getEmail());
+        newUser.setPassword(encoder.encode(signUpRequest.getPassword()));
+
+        // Set default role for official
+        Role officialRole = roleRepository.findByName(ERole.ROLE_OFFICIAL)
+                .orElseGet(() -> {
+                    Role newRole = new Role(ERole.ROLE_OFFICIAL);
+                    roleRepository.save(newRole);
+                    return newRole;
+                });
+
+        Set<Role> roles = new HashSet<>();
+        roles.add(officialRole);
+        newUser.setRoles(roles);
+
+        // Create new official account
+        Official official = new Official();
+        official.setName(signUpRequest.getName());
+        official.setContactNo(signUpRequest.getContactNo());
+        official.setPosition(signUpRequest.getPosition());
+
+        // Link the official to the user entity
+        official.setUser(newUser);
+
+        // Save the user and official entities
+        userRepository.save(newUser);
+        officialRepository.save(official);
+
+        return ResponseEntity.ok(new MessageResponse("Official registered successfully!"));
+    }
 }
+
+
 
 
 

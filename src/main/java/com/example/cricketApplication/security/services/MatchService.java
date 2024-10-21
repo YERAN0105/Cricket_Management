@@ -70,6 +70,7 @@ public class MatchService {
         match.setUmpires(matchDetails.getUmpires());
         match.setMatchCaptain(matchDetails.getMatchCaptain());
         match.setTime(matchDetails.getTime());
+        match.setLogo(matchDetails.getLogo());
 
         // Save the updated match
         Match updatedMatch = matchRepository.save(match);
@@ -93,6 +94,8 @@ public class MatchService {
             matchResponse.setMatchCaptain(match.getMatchCaptain());
             matchResponse.setTime(match.getTime());
             matchResponse.setType(match.getType());
+            matchResponse.setUnder(match.getTeam().getUnder());
+            matchResponse.setLogo(match.getLogo());
 
             matchResponseList.add(matchResponse);
 

@@ -147,6 +147,11 @@ public class PlayerStatsController {
         }
     }
 
+    @PostMapping("/addMultiple")
+    public List<PlayerStats> createMultiplePlayerStats(@RequestBody List<PlayerStats> playerStatsList) {
+        return playerStatsService.createMultiplePlayerStats(playerStatsList);
+    }
+
 
 
 }

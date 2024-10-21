@@ -29,12 +29,12 @@ public class CoachController {
 
     @GetMapping("/{coachId}")
     public ResponseEntity<?> getCoachById(@PathVariable Long coachId) {
-        Optional<Coach> coach = coachService.getCoachById(coachId);
-        if (coach.isPresent()) {
-            return ResponseEntity.ok(coach.get());
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new MessageResponse("Error: Coach not found"));
+        try {
+            CoachResponse coach = coachService.getCoachById(coachId);
+            return ResponseEntity.ok(coach);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new MessageResponse("Error: " + e.getMessage()));
         }
     }
 

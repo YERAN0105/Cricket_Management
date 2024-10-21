@@ -28,5 +28,6 @@ public class MatchSummaryResponse {
     private Date date;
     private String type;
     private String under;
+    private String logo;
 
 }

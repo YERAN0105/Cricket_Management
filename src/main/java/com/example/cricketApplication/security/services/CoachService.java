@@ -35,8 +35,37 @@ public class CoachService {
         return coachRepository.save(coach);
     }
 
-    public Optional<Coach> getCoachById(Long coachId) {
-        return coachRepository.findById(coachId);
+    public CoachResponse getCoachById(Long coachId) {
+        Optional<Coach> coach =  coachRepository.findById(coachId);
+        return RefactorResponse(coach);
+    }
+
+
+    private CoachResponse RefactorResponse(Optional<Coach> coachOp) {
+        Coach coach = coachOp.get();
+        CoachResponse coachResponse = new CoachResponse();
+        coachResponse.setCoachId(coach.getCoachId());
+        coachResponse.setName(coach.getName());
+        coachResponse.setEmail(coach.getEmail());
+        coachResponse.setContactNo(coach.getContactNo());
+        coachResponse.setAddress(coach.getAddress());
+        coachResponse.setDateOfBirth(coach.getDateOfBirth());
+        coachResponse.setImage(coach.getImage());
+        coachResponse.setDescription(coach.getDescription());
+        coachResponse.setUsername(coach.getUser().getUsername());
+        coachResponse.setPassword(coach.getUser().getPassword());
+
+
+        // Handle the case where the User is null
+        if (coach.getUser() != null) {
+            coachResponse.setUsername(coach.getUser().getUsername());
+            coachResponse.setEmail(coach.getUser().getEmail());
+            coachResponse.setPassword(coach.getUser().getPassword());
+        } else {
+            coachResponse.setUsername(null); // Or set a default value
+            coachResponse.setEmail(null); // Or set a default value
+        }
+        return coachResponse;
     }
 
 //    public List<Coach> getAllCoaches() {
@@ -125,6 +154,7 @@ public class CoachService {
             coachResponse.setImage(coach.getImage());
             coachResponse.setDescription(coach.getDescription());
             coachResponse.setUsername(coach.getUser().getUsername());
+            coachResponse.setPassword(coach.getUser().getPassword());
 
             // Handle the case where the User is null
             if (coach.getUser() != null) {

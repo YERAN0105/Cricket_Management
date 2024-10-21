@@ -114,6 +114,11 @@ public class PlayerStatsService {
     }
 
 
+    public List<PlayerStats> createMultiplePlayerStats(List<PlayerStats> playerStatsList) {
+        return playerStatsRepository.saveAll(playerStatsList);  // saveAll method is used to persist the list
+    }
+
+
     public PlayerStats updatePlayerStats(Long id, PlayerStats updatedPlayerStats) {
         PlayerStats existingPlayerStats = playerStatsRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("PlayerStats not found with ID: " + id));

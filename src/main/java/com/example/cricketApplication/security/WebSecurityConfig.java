@@ -66,7 +66,7 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
         .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .authorizeHttpRequests(auth -> 
-          auth.requestMatchers("/api/auth/**","/api/matches/**","/api/matchSummary/**","/api/playerStats/**","/api/coaches/**","/api/practiseSessions/**","/api/teams/**","/api/matchSummary","/api/admin/players/**","/api/privileges/**").permitAll()
+          auth.requestMatchers("/api/auth/**","/api/matches/**","/api/matchSummary/**","/api/playerStats/**","/api/coaches/**","/api/practiseSessions/**","/api/teams/**","/api/matchSummary","/api/admin/players/**","/api/privileges/**","/api/news/**","/api/videos/**","/api/officials/**").permitAll()
                   .requestMatchers(HttpMethod.POST, "/api/admin/players/add").hasRole("ADMIN")
         );
     

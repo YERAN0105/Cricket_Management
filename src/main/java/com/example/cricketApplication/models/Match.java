@@ -30,6 +30,7 @@ public class Match {
     private String umpires;
     private String matchCaptain;
     private String time;
+    private String logo;
 
     @OneToMany(mappedBy = "match", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<PlayerStats> playerStats = new HashSet<>();

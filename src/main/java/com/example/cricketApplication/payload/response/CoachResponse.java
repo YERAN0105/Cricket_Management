@@ -24,5 +24,6 @@ public class CoachResponse {
     private String description;
 
     private String username;
+    private String password;
 
 }

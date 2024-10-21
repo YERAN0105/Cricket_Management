@@ -4,6 +4,7 @@ import com.example.cricketApplication.exceptions.PlayerAlreadyExistsException;
 import com.example.cricketApplication.exceptions.PlayerNotFoundException;
 import com.example.cricketApplication.models.Player;
 import com.example.cricketApplication.models.PlayerStats;
+import com.example.cricketApplication.models.Team;
 import com.example.cricketApplication.payload.response.PlayerResponse;
 import com.example.cricketApplication.payload.response.PlayerStatsResponse;
 import com.example.cricketApplication.repository.PlayerRepository;
@@ -90,6 +91,12 @@ public class PlayerService {
         playerResponse.setEndDate(String.valueOf(player.getMembership().getEndDate()));
         playerResponse.setPassword(player.getUser().getPassword());
         playerResponse.setUsername(player.getUser().getUsername());
+
+        // Extract the 'under' values from the teams associated with the player
+        List<String> teamUnders = player.getTeams().stream()
+                .map(Team::getUnder)  // Get the 'under' value for each team
+                .collect(Collectors.toList());
+        playerResponse.setTeamsUnder(teamUnders);  // Set the list of 'under' values in the response
 
         return playerResponse;
     }
