@@ -29,7 +29,18 @@ public class PlayerResponse {
     private String endDate;
     private String password;
     private String username;
-
+    private Long membershipId;
+    private Date membershipStartDate;
+    private Date membershipEndDate;
+    private String createdBy;
+    private Date createdOn;
+    private String updatedBy;
+    private Date updatedOn;
     // Add a list for 'under' values from the teams
-    private List<String> teamsUnder;
+    private List<PlayerResponseWithTeamDetails> teamDetails;
+    private String message;
+    public PlayerResponse(String message) {
+        this.message = message;
+    }
+
 }

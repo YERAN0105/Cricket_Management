@@ -1,6 +1,7 @@
 package com.example.cricketApplication.security.services;
 
 import com.example.cricketApplication.exceptions.OfficialNotFoundException;
+import com.example.cricketApplication.exceptions.PlayerAlreadyExistsException;
 import com.example.cricketApplication.models.Official;
 import com.example.cricketApplication.models.User;
 import com.example.cricketApplication.payload.response.OfficialResponse;
@@ -45,7 +46,17 @@ public class OfficialService {
                 .orElseThrow(() -> new OfficialNotFoundException("Official not found with ID: " + id));
 
         User user = official.getUser();
+        // Check if the email is already taken by another user
+        if (userRepository.existsByEmail(officialDetails.getUser().getEmail())
+                && !user.getEmail().equals(officialDetails.getUser().getEmail())) {
+            throw new PlayerAlreadyExistsException("Official with email " + officialDetails.getUser().getEmail() + " already exists.");
+        }
 
+        // Check if the username is already taken by another user
+        if (userRepository.existsByUsername(officialDetails.getUser().getUsername())
+                && !user.getUsername().equals(officialDetails.getUser().getUsername())) {
+            throw new PlayerAlreadyExistsException("Official with username " + officialDetails.getUser().getUsername() + " already exists.");
+        }
         if (officialDetails.getUser() != null) {
             // Update the username if provided in the request body
             if (officialDetails.getUser().getUsername() != null && !officialDetails.getUser().getUsername().isEmpty()) {
@@ -71,6 +82,8 @@ public class OfficialService {
         official.setName(officialDetails.getName());
         official.setContactNo(officialDetails.getContactNo());
         official.setPosition(officialDetails.getPosition());
+        official.setUpdatedOn(officialDetails.getUpdatedOn());
+        official.setUpdatedBy(officialDetails.getUpdatedBy());
         Official updatedOfficial = officialRepository.save(official);
 
         return refactorResponse(updatedOfficial);
@@ -93,7 +106,10 @@ public class OfficialService {
         officialResponse.setPassword(official.getUser().getPassword());
         officialResponse.setEmail(official.getUser().getEmail());
         officialResponse.setUsername(official.getUser().getUsername());
-
+        officialResponse.setCreatedBy(official.getCreatedBy());
+        officialResponse.setUpdatedBy(official.getUpdatedBy());
+        officialResponse.setCreatedOn(official.getCreatedOn());
+        officialResponse.setUpdatedOn(official.getUpdatedOn());
         // Assuming the official is associated with teams or events, get them
 
         return officialResponse;

@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Getter
@@ -17,10 +18,10 @@ public class MatchSummaryResponse {
     private String inning;
     private int runs;
     private int wickets;
-    private int overs;
+    private BigDecimal overs;
     private int oppositionRuns;
     private int oppositionWickets;
-    private int oppositionOvers;
+    private BigDecimal oppositionOvers;
     private String result;
     private Long matchId; // Match ID for reference
     private String venue;  // New field for venue
@@ -28,6 +29,12 @@ public class MatchSummaryResponse {
     private Date date;
     private String type;
     private String under;
+    private Long teamId;
+    private int teamYear;
     private String logo;
+    private String createdBy;
+    private Date createdOn;
+    private String updatedBy;
+    private Date updatedOn;
 
 }

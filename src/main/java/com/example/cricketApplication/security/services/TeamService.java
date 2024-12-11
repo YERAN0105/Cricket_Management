@@ -20,9 +20,20 @@ public class TeamService {
     @Autowired
     private TeamRepository teamRepository;
 
+//    public Team addTeam(Team team) {
+//        return teamRepository.save(team);
+//    }
+
     public Team addTeam(Team team) {
+        Optional<Team> existingTeam = teamRepository.findByUnderAndYear(team.getUnder(), team.getYear());
+
+        if (existingTeam.isPresent()) {
+            throw new IllegalArgumentException("A team with the same 'under' category and year already exists.");
+        }
+
         return teamRepository.save(team);
     }
+
 
     public Optional<Team> getTeamById(Long id) {
         return teamRepository.findById(id);
@@ -63,7 +74,10 @@ public class TeamService {
             existingTeam.setUnder(teamDetails.getUnder());
             existingTeam.setYear(teamDetails.getYear());
             existingTeam.setCaptain(teamDetails.getCaptain());
+            existingTeam.setViceCaptain(teamDetails.getViceCaptain());
             existingTeam.setPlayers(teamDetails.getPlayers());
+            existingTeam.setUpdatedBy(teamDetails.getUpdatedBy());
+            existingTeam.setUpdatedOn(teamDetails.getUpdatedOn());
 
             // Save updated team
             Team updatedTeam = teamRepository.save(existingTeam);
@@ -89,8 +103,12 @@ public class TeamService {
             teamResponse.setTeamId(team1.getTeamId());
             teamResponse.setYear(team1.getYear());
             teamResponse.setCaptain(team1.getCaptain());
+            teamResponse.setViceCaptain(team1.getViceCaptain());
             teamResponse.setUnder(team1.getUnder());
-
+            teamResponse.setCreatedBy(team1.getCreatedBy());
+            teamResponse.setUpdatedBy(team1.getUpdatedBy());
+            teamResponse.setCreatedOn(team1.getCreatedOn());
+            teamResponse.setUpdatedOn(team1.getUpdatedOn());
             teamResponses.add(teamResponse);
         }
         return teamResponses;
@@ -101,7 +119,12 @@ public class TeamService {
         teamResponse.setTeamId(team.getTeamId());
         teamResponse.setYear(team.getYear());
         teamResponse.setCaptain(team.getCaptain());
+        teamResponse.setViceCaptain(team.getViceCaptain());
         teamResponse.setUnder(team.getUnder());
+        teamResponse.setCreatedBy(team.getCreatedBy());
+        teamResponse.setUpdatedBy(team.getUpdatedBy());
+        teamResponse.setCreatedOn(team.getCreatedOn());
+        teamResponse.setUpdatedOn(team.getUpdatedOn());
         return teamResponse;
     }
 
@@ -118,6 +141,11 @@ public class TeamService {
             playerResponse.setBattingStyle(player.getBattingStyle());
             playerResponse.setBowlingStyle(player.getBowlingStyle());
             playerResponse.setPlayerRole(player.getPlayerRole());
+            playerResponse.setImage(player.getImage());
+            playerResponse.setCreatedBy(player.getCreatedBy());
+            playerResponse.setUpdatedBy(player.getUpdatedBy());
+            playerResponse.setCreatedOn(player.getCreatedOn());
+            playerResponse.setUpdatedOn(player.getUpdatedOn());
             playerResponses.add(playerResponse);
         }
         return playerResponses;

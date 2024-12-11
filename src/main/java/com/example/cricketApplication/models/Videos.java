@@ -7,6 +7,7 @@ import jakarta.persistence.Id;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @lombok.Getter
 @lombok.Setter
@@ -24,5 +25,9 @@ public class Videos {
 
         @CreationTimestamp
         private LocalDateTime dateTime;
+        private String createdBy;
+        private Date createdOn;
+        private String updatedBy;
+        private Date updatedOn;
 
     }

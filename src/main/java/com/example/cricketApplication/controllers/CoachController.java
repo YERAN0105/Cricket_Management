@@ -4,11 +4,13 @@ import com.example.cricketApplication.models.Coach;
 import com.example.cricketApplication.payload.response.CoachResponse;
 import com.example.cricketApplication.payload.response.MessageResponse;
 import com.example.cricketApplication.security.services.CoachService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -74,16 +76,37 @@ public class CoachController {
 
 
 
+//    @PutMapping("/{coachId}")
+//    public ResponseEntity<?> updateCoach(@PathVariable Long coachId, @RequestBody Coach coachDetails) {
+//        try {
+//            CoachResponse updatedCoach = coachService.updateCoach(coachId, coachDetails);
+//            return ResponseEntity.ok(updatedCoach);
+//        } catch (EntityNotFoundException e) {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+//                    .body(new MessageResponse("Error: " + e.getMessage()));
+//        }
+//    }
+
     @PutMapping("/{coachId}")
-    public ResponseEntity<?> updateCoach(@PathVariable Long coachId, @RequestBody Coach coachDetails) {
+    public ResponseEntity<CoachResponse> updateCoach(
+            @PathVariable Long coachId,
+            @RequestParam("userData") String userData, // Coach details as JSON
+            @RequestParam(value = "image", required = false) MultipartFile imageFile) { // Optional image file
         try {
-            CoachResponse updatedCoach = coachService.updateCoach(coachId, coachDetails);
+            // Parse the JSON data into the Coach object
+            ObjectMapper objectMapper = new ObjectMapper();
+            Coach coachDetails = objectMapper.readValue(userData, Coach.class);
+
+            // Call the service to update the coach with the image (if provided)
+            CoachResponse updatedCoach = coachService.updateCoach(coachId, coachDetails, imageFile);
+
             return ResponseEntity.ok(updatedCoach);
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new MessageResponse("Error: " + e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new CoachResponse("Error: " + e.getMessage()));
         }
     }
+
 
 }
 

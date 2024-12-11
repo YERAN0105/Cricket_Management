@@ -110,7 +110,7 @@ public class PlayerStatsService {
         List<PlayerStats> playerStatsList = playerStatsRepository.findByPlayer_PlayerId(playerId);
 
         // Use the RefactorResponse method to convert the list of PlayerStats to PlayerStatsResponse
-        return RefactorResponse(playerStatsList);
+        return refactorResponse(playerStatsList);
     }
 
 
@@ -133,19 +133,22 @@ public class PlayerStatsService {
         existingPlayerStats.setSixers(updatedPlayerStats.getSixers());
         existingPlayerStats.setWickets(updatedPlayerStats.getWickets());
         existingPlayerStats.setRunsConceded(updatedPlayerStats.getRunsConceded());
+        existingPlayerStats.setWides(updatedPlayerStats.getWides());
+        existingPlayerStats.setNoBalls(updatedPlayerStats.getNoBalls());
+        existingPlayerStats.setMaidens(updatedPlayerStats.getMaidens());
         existingPlayerStats.setInning(updatedPlayerStats.getInning());
         existingPlayerStats.setPlayer(updatedPlayerStats.getPlayer());
         existingPlayerStats.setMatch(updatedPlayerStats.getMatch());
+        existingPlayerStats.setUpdatedBy(updatedPlayerStats.getUpdatedBy());
+        existingPlayerStats.setUpdatedOn(updatedPlayerStats.getUpdatedOn());
+        existingPlayerStats.setHowOut(updatedPlayerStats.getHowOut());
+        existingPlayerStats.setCatches(updatedPlayerStats.getCatches());
+        existingPlayerStats.setStumps(updatedPlayerStats.getStumps());
+        existingPlayerStats.setRunOuts(updatedPlayerStats.getRunOuts());
+        existingPlayerStats.setRemarks(updatedPlayerStats.getRemarks());
 
         return playerStatsRepository.save(existingPlayerStats);
     }
-
-
-
-
-
-
-
 
     private List<PlayerStatsResponse> RefactorResponse(List<PlayerStats> playerStatsList) {
         List<PlayerStatsResponse> playerStatsResponseList = new ArrayList<>();
@@ -163,6 +166,18 @@ public class PlayerStatsService {
             playerStatsResponse.setSixers(playerStats.getSixers());
             playerStatsResponse.setWickets(playerStats.getWickets());
             playerStatsResponse.setRunsConceded(playerStats.getRunsConceded());
+            playerStatsResponse.setWides(playerStats.getWides());
+            playerStatsResponse.setNoBalls(playerStats.getNoBalls());
+            playerStatsResponse.setMaidens(playerStats.getMaidens());
+            playerStatsResponse.setHowOut(playerStats.getHowOut());
+            playerStatsResponse.setCreatedBy(playerStats.getCreatedBy());
+            playerStatsResponse.setUpdatedBy(playerStats.getUpdatedBy());
+            playerStatsResponse.setCreatedOn(playerStats.getCreatedOn());
+            playerStatsResponse.setUpdatedOn(playerStats.getUpdatedOn());
+            playerStatsResponse.setCatches(playerStats.getCatches());
+            playerStatsResponse.setStumps(playerStats.getStumps());
+            playerStatsResponse.setRunOuts(playerStats.getRunOuts());
+            playerStatsResponse.setRemarks(playerStats.getRemarks());
 
             PlayerResponse playerResponse = new PlayerResponse();
             playerResponse.setPlayerId(playerStats.getPlayer().getPlayerId());
@@ -174,6 +189,63 @@ public class PlayerStatsService {
             if (playerStats.getMatch() != null) {
                 matchResponseWithStat.setMatchId(String.valueOf(playerStats.getMatch().getMatchId()));
                 matchResponseWithStat.setType(playerStats.getMatch().getType());
+                //matchResponseWithStat.setUnder(playerStats.getMatch().getTeam().getUnder());
+                //matchResponseWithStat.setYear(playerStats.getMatch().getTeam().getYear());
+            }
+            playerStatsResponse.setMatch(matchResponseWithStat);
+
+//            MatchResponse matchResponse = new MatchResponse();
+//            matchResponse.setMatchId(playerStats.getMatch().getMatchId());
+//            matchResponse.setType(playerStats.getMatch().getType());
+
+
+            playerStatsResponseList.add(playerStatsResponse);
+
+        }
+        return playerStatsResponseList;
+    }
+
+    private List<PlayerStatsResponse> refactorResponse(List<PlayerStats> playerStatsList) {
+        List<PlayerStatsResponse> playerStatsResponseList = new ArrayList<>();
+        for (PlayerStats playerStats : playerStatsList) {
+            PlayerStatsResponse playerStatsResponse = new PlayerStatsResponse();
+            playerStatsResponse.setId(playerStats.getId());
+            playerStatsResponse.setBalls(playerStats.getBalls());
+            playerStatsResponse.setCenturies(playerStats.getCenturies());
+            playerStatsResponse.setInning(playerStats.getInning());
+            playerStatsResponse.setFifties(playerStats.getFifties());
+            playerStatsResponse.setFours(playerStats.getFours());
+            playerStatsResponse.setSixers(playerStats.getSixers());
+            playerStatsResponse.setOvers(playerStats.getOvers());
+            playerStatsResponse.setRuns(playerStats.getRuns());
+            playerStatsResponse.setSixers(playerStats.getSixers());
+            playerStatsResponse.setWickets(playerStats.getWickets());
+            playerStatsResponse.setRunsConceded(playerStats.getRunsConceded());
+            playerStatsResponse.setWides(playerStats.getWides());
+            playerStatsResponse.setNoBalls(playerStats.getNoBalls());
+            playerStatsResponse.setMaidens(playerStats.getMaidens());
+            playerStatsResponse.setHowOut(playerStats.getHowOut());
+            playerStatsResponse.setCreatedBy(playerStats.getCreatedBy());
+            playerStatsResponse.setUpdatedBy(playerStats.getUpdatedBy());
+            playerStatsResponse.setCreatedOn(playerStats.getCreatedOn());
+            playerStatsResponse.setUpdatedOn(playerStats.getUpdatedOn());
+            playerStatsResponse.setCatches(playerStats.getCatches());
+            playerStatsResponse.setStumps(playerStats.getStumps());
+            playerStatsResponse.setRunOuts(playerStats.getRunOuts());
+            playerStatsResponse.setRemarks(playerStats.getRemarks());
+
+            PlayerResponse playerResponse = new PlayerResponse();
+            playerResponse.setPlayerId(playerStats.getPlayer().getPlayerId());
+            playerResponse.setName(playerStats.getPlayer().getName());
+
+            playerStatsResponse.setPlayer(playerResponse);
+
+            MatchResponseWithStat matchResponseWithStat = new MatchResponseWithStat();
+            if (playerStats.getMatch() != null) {
+                matchResponseWithStat.setMatchId(String.valueOf(playerStats.getMatch().getMatchId()));
+                matchResponseWithStat.setType(playerStats.getMatch().getType());
+                matchResponseWithStat.setUnder(playerStats.getMatch().getTeam().getUnder());
+                matchResponseWithStat.setYear(playerStats.getMatch().getTeam().getYear());
             }
             playerStatsResponse.setMatch(matchResponseWithStat);
 

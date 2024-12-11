@@ -5,6 +5,7 @@ import com.example.cricketApplication.payload.response.PlayerResponse;
 import com.example.cricketApplication.payload.response.TeamResponse;
 import com.example.cricketApplication.security.services.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,11 +18,22 @@ public class TeamController {
     @Autowired
     private TeamService teamService;
 
+//    @PostMapping("/add")
+//    public ResponseEntity<Team> addTeam(@RequestBody Team team) {
+//        Team savedTeam = teamService.addTeam(team);
+//        return ResponseEntity.ok(savedTeam);
+//    }
+
     @PostMapping("/add")
-    public ResponseEntity<Team> addTeam(@RequestBody Team team) {
-        Team savedTeam = teamService.addTeam(team);
-        return ResponseEntity.ok(savedTeam);
+    public ResponseEntity<?> addTeam(@RequestBody Team team) {
+        try {
+            Team savedTeam = teamService.addTeam(team);
+            return ResponseEntity.ok(savedTeam);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+        }
     }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<Team> getTeamById(@PathVariable Long id) {

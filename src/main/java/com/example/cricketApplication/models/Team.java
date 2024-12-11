@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.NoArgsConstructor;
+
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -22,6 +24,7 @@ public class Team {
     private String under; // "Under 13", "Under 15", etc.
     private int year;
     private String captain;
+    private String viceCaptain;
 
     @OneToMany(mappedBy = "team", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference
@@ -36,5 +39,9 @@ public class Team {
 
     @OneToMany(mappedBy = "team", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Match> matches = new HashSet<>();
+    private String createdBy;
+    private Date createdOn;
+    private String updatedBy;
+    private Date updatedOn;
 }
 

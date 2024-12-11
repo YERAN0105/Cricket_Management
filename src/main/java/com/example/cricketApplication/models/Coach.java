@@ -28,6 +28,11 @@ public class Coach {
 
     private String image; // URL or path to the coach's image
     private String description;
+    private String status;
+    private String createdBy;
+    private Date createdOn;
+    private String updatedBy;
+    private Date updatedOn;
 
     @ManyToMany(mappedBy = "coaches")
     private Set<PractiseSession> practiseSessions = new HashSet<>();

@@ -25,7 +25,7 @@ public class SignupRequest {
   @Email
   private String email;
 
-  private Set<String> roles;
+  private Set<String> role;
 
   @NotBlank
   @Size(min = 6, max = 40)
@@ -54,6 +54,10 @@ public class SignupRequest {
   private String address;
   private String description;
   private String position;
+  private String createdBy;
+  private Date createdOn;
+  private String updatedBy;
+  private Date updatedOn;
 
 
 

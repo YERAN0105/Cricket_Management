@@ -7,5 +7,7 @@ package com.example.cricketApplication.payload.response;
 public class MatchResponseWithStat {
     private String matchId;
     private String type;
+    private String under;
+    private int year;
 
 }

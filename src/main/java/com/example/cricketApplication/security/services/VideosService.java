@@ -32,6 +32,8 @@ public class VideosService {
             video.setTitle(videoDetails.getTitle());
             video.setUrl(videoDetails.getUrl());
             video.setDateTime(videoDetails.getDateTime());
+            video.setUpdatedBy(videoDetails.getUpdatedBy());
+            video.setUpdatedOn(videoDetails.getUpdatedOn());
             return videosRepository.save(video);
         }).orElseThrow(() -> new EntityNotFoundException("Video not found with id: " + id));
     }

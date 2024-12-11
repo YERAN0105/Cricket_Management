@@ -9,13 +9,19 @@ public class JwtResponse {
   private String username;
   private String email;
   private List<String> roles;
+  private Long playerId;
+  private Long coachId;
+  private Long officialId;
 
-  public JwtResponse(String accessToken, Long id, String username, String email, List<String> roles) {
+  public JwtResponse(String accessToken, Long id, String username, String email, List<String> roles, Long playerId, Long coachId, Long officialId) {
     this.token = accessToken;
     this.id = id;
     this.username = username;
     this.email = email;
     this.roles = roles;
+    this.playerId = playerId;
+    this.coachId = coachId;
+    this.officialId = officialId;
   }
 
   public String getAccessToken() {
@@ -61,4 +67,15 @@ public class JwtResponse {
   public List<String> getRoles() {
     return roles;
   }
+
+  public void setPlayerId(Long playerId) {
+    this.playerId = playerId;
+  }
+
+  public Long getPlayerId() {return playerId;}
+
+  public void setCoachId(Long coachId) {this.coachId = coachId;}
+  public Long getCoachId() {return coachId;}
+  public void setOfficialId(Long officialId) {this.officialId = officialId;}
+  public Long getOfficialId() {return officialId;}
 }

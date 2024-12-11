@@ -6,12 +6,15 @@ import com.example.cricketApplication.payload.response.MatchSummaryResponse;
 import com.example.cricketApplication.payload.response.MessageResponse;
 
 import com.example.cricketApplication.security.services.MatchSummaryService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +34,23 @@ public class MatchSummaryController {
     public MatchSummary createMatchSummary(@RequestBody MatchSummary matchSummary) {
         return matchSummaryService.createMatchSummary(matchSummary);
     }
+
+//    @PostMapping("/add")
+//    public MatchSummary createMatchSummary(
+//            @RequestPart("matchSummary") String matchSummaryJson,
+//            @RequestPart(value = "imageFile", required = false) MultipartFile imageFile) {
+//        // Parse the JSON string into a MatchSummary object
+//        ObjectMapper objectMapper = new ObjectMapper();
+//        MatchSummary matchSummary;
+//        try {
+//            matchSummary = objectMapper.readValue(matchSummaryJson, MatchSummary.class);
+//        } catch (JsonProcessingException e) {
+//            throw new RuntimeException("Error parsing match summary JSON: " + e.getMessage(), e);
+//        }
+//
+//        return matchSummaryService.createMatchSummary(matchSummary, imageFile);
+//    }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getMatchSummaryById(@PathVariable Long id) {
@@ -77,6 +97,18 @@ public class MatchSummaryController {
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new ArrayList<>()); // or some meaningful error response
+        }
+    }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<?> updateMatchSummary(@PathVariable Long id, @RequestBody MatchSummary matchSummary) {
+        try {
+            MatchSummaryResponse updatedMatchSummary = matchSummaryService.updateMatchSummary(id, matchSummary);
+            return ResponseEntity.ok(updatedMatchSummary);
+        } catch (Exception e) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(new MessageResponse("Error: " + e.getMessage()));
         }
     }
 }

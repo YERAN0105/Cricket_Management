@@ -22,7 +22,7 @@ public class PractiseSession {
     @Temporal(TemporalType.DATE)
     private Date date;
 
-    private String starTime;
+    private String startTime;
     private String endTime;
     private String pracType;
 
@@ -45,6 +45,10 @@ public class PractiseSession {
     @JoinColumn(name = "team_id", nullable = false)
     @JsonBackReference
     private Team team;
+    private String createdBy;
+    private Date createdOn;
+    private String updatedBy;
+    private Date updatedOn;
 
     // Getters and setters
 }

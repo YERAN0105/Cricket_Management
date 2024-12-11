@@ -48,6 +48,9 @@ public class Player {
     @OneToMany(mappedBy = "player", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<PlayerStats> playerStats = new HashSet<>();
 
+    @OneToMany(mappedBy = "player", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<HistoricalPlayerStats> historicalPlayerStats = new HashSet<>();
+
 //    @ManyToMany(mappedBy = "players")
 //    private Set<PractiseSession> practiseSessions = new HashSet<>();
 
@@ -61,6 +64,10 @@ public class Player {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn( name = "membership_id",referencedColumnName = "id",nullable = true)
     private Membership membership;
+    private String createdBy;
+    private Date createdOn;
+    private String updatedBy;
+    private Date updatedOn;
 
     public Player(String name, String contactNo, String battingStyle, String bowlingStyle, String status, String image,String playerRole,Membership membership,String email,Date dateOfBirth,Role role) {
     this.name = name;

@@ -1,5 +1,7 @@
 package com.example.cricketApplication.payload.response;
 
+import java.util.Date;
+
 @lombok.Getter
 @lombok.Setter
 @lombok.NoArgsConstructor
@@ -13,4 +15,8 @@ public class OfficialResponse {
     private String position;
     private String password;
     private String username;
+    private String createdBy;
+    private Date createdOn;
+    private String updatedBy;
+    private Date updatedOn;
 }

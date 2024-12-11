@@ -4,6 +4,7 @@ import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 
 import java.util.Date;
+import java.util.List;
 
 @lombok.Getter
 @lombok.Setter
@@ -24,7 +25,20 @@ public class MatchResponse {
     private String type;
     private String umpires;
     private String matchCaptain;
+    private String matchViceCaptain;
     private String time;
     private String under;
+    private Long teamId;
+    private int teamYear;
     private String logo;
+    private List<MatchCoachResponse> coaches;
+    private String createdBy;
+    private Date createdOn;
+    private String updatedBy;
+    private Date updatedOn;
+    private List<PlayerResponseWithTeamDetails> teamDetails;
+    private String message;
+    public MatchResponse(String message) {
+        this.message = message;
+    }
 }

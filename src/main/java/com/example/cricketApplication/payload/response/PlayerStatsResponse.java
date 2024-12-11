@@ -1,5 +1,8 @@
 package com.example.cricketApplication.payload.response;
 
+import java.math.BigDecimal;
+import java.util.Date;
+
 @lombok.Getter
 @lombok.Setter
 @lombok.NoArgsConstructor
@@ -16,8 +19,20 @@ public class PlayerStatsResponse {
     private int fifties;
     private int centuries;
     private int balls;
-    private int overs;
+    private BigDecimal overs;
     private int runsConceded;
+    private int noBalls;
+    private int wides;
+    private int maidens;
+    private String howOut;
+    private String createdBy;
+    private Date createdOn;
+    private String updatedBy;
+    private Date updatedOn;
+    private int catches;
+    private int stumps;
+    private int runOuts;
+    private String remarks;
 
     // Add player details
     private PlayerResponse player;
