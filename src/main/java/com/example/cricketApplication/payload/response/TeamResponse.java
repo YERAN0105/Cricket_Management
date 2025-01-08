@@ -1,6 +1,7 @@
 package com.example.cricketApplication.payload.response;
 
 import java.util.Date;
+import java.util.List;
 
 @lombok.Getter
 @lombok.Setter
@@ -14,8 +15,12 @@ public class TeamResponse {
     private int year;
     private String captain;
     private String ViceCaptain;
+
+//    private Long captain;
+//    private Long ViceCaptain;
     private String createdBy;
     private Date createdOn;
     private String updatedBy;
     private Date updatedOn;
+    private List<PlayerResponse> players;
 }

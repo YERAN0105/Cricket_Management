@@ -23,8 +23,17 @@ public class Team {
 
     private String under; // "Under 13", "Under 15", etc.
     private int year;
-    private String captain;
-    private String viceCaptain;
+//    private String captain;
+//    private String viceCaptain;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "captainId", referencedColumnName = "playerId")
+    private Player captain;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "viceCaptainId", referencedColumnName = "playerId")
+    private Player viceCaptain;
+
 
     @OneToMany(mappedBy = "team", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference

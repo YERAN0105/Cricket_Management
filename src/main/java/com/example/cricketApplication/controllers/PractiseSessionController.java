@@ -6,6 +6,7 @@ import com.example.cricketApplication.security.services.PractiseSessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,6 +28,7 @@ public class PractiseSessionController {
 
 
     @PostMapping("/add")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_COACH')")
     public ResponseEntity<PractiseSession> addPractiseSession(@RequestBody PractiseSession practiseSession) {
         PractiseSession savedPractiseSession = practiseSessionService.addPractiseSession(practiseSession);
         return ResponseEntity.ok(savedPractiseSession);
@@ -39,12 +41,14 @@ public class PractiseSessionController {
 //    }
 
     @GetMapping("/all")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_COACH', 'ROLE_PLAYER', 'ROLE_OFFICIAL')")
     public ResponseEntity<List<PracticeSessionResponse>> getAllPractiseSessions() {
         List<PracticeSessionResponse> practiseSessions = practiseSessionService.getAllPractiseSessions();
         return ResponseEntity.ok(practiseSessions);
     }
 
     @GetMapping("/{pracId}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_COACH', 'ROLE_PLAYER', 'ROLE_OFFICIAL')")
     public ResponseEntity<?> getPractiseSessionById(@PathVariable Long pracId) {
         Optional<PractiseSession> practiseSession = practiseSessionService.getPractiseSessionById(pracId);
         if (practiseSession.isPresent()) {
@@ -69,6 +73,7 @@ public class PractiseSessionController {
 //    }
 
     @DeleteMapping("/{pracId}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_COACH')")
     public ResponseEntity<?> deletePractiseSessionById(@PathVariable Long pracId) {
         try {
             practiseSessionService.deletePractiseSessionById(pracId);
@@ -82,6 +87,7 @@ public class PractiseSessionController {
 
 
     @GetMapping("/coach/{coachId}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_COACH', 'ROLE_PLAYER', 'ROLE_OFFICIAL')")
     public ResponseEntity<List<PracticeSessionResponse>> getPractiseSessionsByCoachId(@PathVariable Long coachId) {
         List<PracticeSessionResponse> practiseSessions = practiseSessionService.getPractiseSessionsByCoachId(coachId);
         if (practiseSessions.isEmpty()) {
@@ -92,6 +98,7 @@ public class PractiseSessionController {
 
 
     @PutMapping("/update/{pracId}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_COACH')")
     public ResponseEntity<PracticeSessionResponse> updatePractiseSession(
             @PathVariable Long pracId,
             @RequestBody PractiseSession practiseSessionDetails) {
@@ -105,5 +112,15 @@ public class PractiseSessionController {
         }
     }
 
+    @GetMapping("/player/{playerId}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_COACH', 'ROLE_PLAYER', 'ROLE_OFFICIAL')")
+    public ResponseEntity<List<PracticeSessionResponse>> getPractiseSessionsByPlayerId(@PathVariable Long playerId) {
+        List<PracticeSessionResponse> practiseSessions = practiseSessionService.getPractiseSessionsByPlayerId(playerId);
+        return ResponseEntity.ok(practiseSessions);
+    }
+
 
 }
+
+
+

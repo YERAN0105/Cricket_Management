@@ -3,6 +3,8 @@ package com.example.cricketApplication.models;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -11,6 +13,7 @@ import java.util.Set;
 @lombok.Getter
 @lombok.Setter
 @lombok.NoArgsConstructor
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "playerId")
 
 @Entity
 @Table(name = "players")

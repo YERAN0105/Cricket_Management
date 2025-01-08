@@ -31,6 +31,7 @@ public class MatchSummaryController {
 
 
     @PostMapping("/add")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public MatchSummary createMatchSummary(@RequestBody MatchSummary matchSummary) {
         return matchSummaryService.createMatchSummary(matchSummary);
     }
@@ -53,6 +54,7 @@ public class MatchSummaryController {
 
 
     @GetMapping("/{id}")
+
     public ResponseEntity<?> getMatchSummaryById(@PathVariable Long id) {
         Optional<MatchSummary> matchSummary = matchSummaryService.getMatchSummaryById(id);
         if (matchSummary.isPresent()) {
@@ -71,6 +73,7 @@ public class MatchSummaryController {
 //    }
 
     @GetMapping("/all")
+
     public ResponseEntity<List<MatchSummaryResponse>> getAllMatchSummaries() {
         List<MatchSummaryResponse> matchSummaryResponses = matchSummaryService.getAllMatchSummaries();
         return ResponseEntity.ok(matchSummaryResponses);
@@ -78,6 +81,7 @@ public class MatchSummaryController {
 
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> deleteMatchSummaryById(@PathVariable Long id) {
         try {
             matchSummaryService.deleteMatchSummaryById(id);
@@ -90,6 +94,7 @@ public class MatchSummaryController {
     }
 
     @GetMapping("/match/{matchId}")
+
     public ResponseEntity<List<MatchSummaryResponse>> getMatchSummariesByMatchId(@PathVariable Long matchId) {
         List<MatchSummaryResponse> matchSummaries = matchSummaryService.getMatchSummariesByMatchId(matchId);
         if (!matchSummaries.isEmpty()) {
@@ -101,6 +106,7 @@ public class MatchSummaryController {
     }
 
     @PutMapping("/update/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> updateMatchSummary(@PathVariable Long id, @RequestBody MatchSummary matchSummary) {
         try {
             MatchSummaryResponse updatedMatchSummary = matchSummaryService.updateMatchSummary(id, matchSummary);
@@ -112,4 +118,11 @@ public class MatchSummaryController {
         }
     }
 }
+
+
+
+
+
+
+
 

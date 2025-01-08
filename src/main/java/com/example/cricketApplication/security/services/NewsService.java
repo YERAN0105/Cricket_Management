@@ -162,3 +162,7 @@ public class NewsService {
         newsRepository.deleteById(id);
     }
 }
+
+
+
+

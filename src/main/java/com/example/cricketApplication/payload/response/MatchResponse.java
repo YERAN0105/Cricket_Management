@@ -26,6 +26,10 @@ public class MatchResponse {
     private String umpires;
     private String matchCaptain;
     private String matchViceCaptain;
+
+//    private Long matchCaptain;
+//    private Long matchViceCaptain;
+
     private String time;
     private String under;
     private Long teamId;

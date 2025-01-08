@@ -69,6 +69,9 @@ public class AuthController {
     @Autowired
     OfficialRepository officialRepository;
 
+    @Autowired
+    AdminRepository adminRepository;
+
 //    private String IMAGE_DIRECTORY = WebConfig.getImageDirectory();
       private static final String IMAGE_DIRECTORY = "D:\\upload\\";
 
@@ -134,6 +137,7 @@ public class AuthController {
         Long playerId = null;
         Long coachId = null;
         Long officialId = null;
+        Long adminId = null;
 
         // Check if the user has the ROLE_PLAYER
         if (roles.contains("ROLE_PLAYER")) {
@@ -164,6 +168,12 @@ public class AuthController {
             officialId = official.getId();  // Store officialId
         }
 
+//        if (roles.contains("ROLE_ADMIN")) {
+//            Admin admin = adminRepository.findByUser(user)
+//                    .orElseThrow(() -> new RuntimeException("Error: Admin not found."));
+//            adminId = admin.getAdminId();  // Store officialId
+//        }
+
         // Generate JWT token if all checks passed
         String jwt = jwtUtils.generateJwtToken(authentication);
 
@@ -175,6 +185,7 @@ public class AuthController {
                 playerId,  // Include playerId
                 coachId,   // Include coachId
                 officialId // Include officialId
+                //adminId
         ));
     }
 
@@ -391,6 +402,7 @@ public class AuthController {
 
 
     @PostMapping(value = "/signupPlayer", consumes = "multipart/form-data")
+   @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> registerPlayer(
             @RequestParam("userData") String userData,
             @RequestParam("image") MultipartFile imageFile) {
@@ -535,7 +547,9 @@ public class AuthController {
 //        return ResponseEntity.ok(new CoachResponse(coach));
 //    }
 
+
     @PostMapping(value = "/signupCoach", consumes = "multipart/form-data")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> registerCoach(
             @RequestParam("userData") String userData,
             @RequestParam("image") MultipartFile imageFile) {
@@ -609,6 +623,7 @@ public class AuthController {
 
 
     @PostMapping("/signup")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> registerAdmin(@Valid @RequestBody SignupRequest signUpRequest) {
         // Check if the username already exists
         if (userRepository.existsByUsername(signUpRequest.getUsername())) {
@@ -642,8 +657,19 @@ public class AuthController {
         roles.add(adminRole);
         newUser.setRoles(roles);
 
+        Admin admin = new Admin();
+        admin.setName(signUpRequest.getName());
+        admin.setContactNo(signUpRequest.getContactNo());
+        admin.setCreatedBy(signUpRequest.getCreatedBy());
+        admin.setCreatedOn(signUpRequest.getCreatedOn());
+
+
+        admin.setUser(newUser);
+
         // Save the user entity with admin role
         userRepository.save(newUser);
+        adminRepository.save(admin);
+
 
         return ResponseEntity.ok(new MessageResponse("Admin registered successfully!"));
     }
@@ -652,6 +678,7 @@ public class AuthController {
 
     //@PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/signupOfficial")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> registerOfficial(@Valid @RequestBody SignupRequest signUpRequest) {
         // Check if the username already exists
         if (userRepository.existsByUsername(signUpRequest.getUsername())) {
@@ -705,6 +732,7 @@ public class AuthController {
 
 
     @GetMapping("/checkAvailability")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> checkAvailability(
             @RequestParam(value = "username", required = false) String username,
             @RequestParam(value = "email", required = false) String email) {
@@ -723,6 +751,7 @@ public class AuthController {
     }
 
     @GetMapping("/checkUsernameAvailability")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> checkUsernameAvailability(
             @RequestParam(value = "username", required = false) String username) {
 
@@ -736,6 +765,7 @@ public class AuthController {
     }
 
     @GetMapping("/checkEmailAvailability")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> checkEmailAvailability(
             @RequestParam(value = "email", required = false) String email) {
 

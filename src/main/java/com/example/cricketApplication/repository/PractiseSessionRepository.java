@@ -9,9 +9,17 @@ import java.util.List;
 
 @Repository
 public interface PractiseSessionRepository extends JpaRepository<PractiseSession, Long> {
+    // Custom query to get practice sessions for a player through the player's teams
+    @Query("SELECT ps FROM PractiseSession ps " +
+            "JOIN ps.team t " +
+            "JOIN t.players p " +
+            "WHERE p.playerId = :playerId")
+    List<PractiseSession> findPractiseSessionsByPlayerId(Long playerId);
+
 //    List<PractiseSession> findByAssignedCoach_CoachId(Long coachId);
 //    List<PractiseSession> findByUnder(String under);
 @Query("SELECT ps FROM PractiseSession ps JOIN ps.coaches c WHERE c.coachId = :coachId")
 List<PractiseSession> findAllByCoachId(@Param("coachId") Long coachId);
+
 }
 

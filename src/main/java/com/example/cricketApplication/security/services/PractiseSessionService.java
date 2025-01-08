@@ -44,7 +44,7 @@ public class PractiseSessionService {
         PractiseSession savedPractiseSession = practiseSessionRepository.save(practiseSession);
 
         // Send SMS notifications
-        sendSmsNotifications(team, savedPractiseSession);
+        //sendSmsNotifications(team, savedPractiseSession);
 
         return savedPractiseSession;
     }
@@ -126,6 +126,17 @@ public class PractiseSessionService {
 
         // Return the refactored response
         return refactorResponse(updatedPractiseSession);
+    }
+
+    // Method to get all practice sessions for a player by playerId
+    public List<PracticeSessionResponse> getPractiseSessionsByPlayerId(Long playerId) {
+        List<PractiseSession> practiceSessions = practiseSessionRepository.findPractiseSessionsByPlayerId(playerId);
+        List<PracticeSessionResponse> practiceSessionResponses = new ArrayList<>();
+        for (PractiseSession practiceSession : practiceSessions) {
+            PracticeSessionResponse practiceSessionResponse = refactorResponse(practiceSession);
+            practiceSessionResponses.add(practiceSessionResponse);
+        }
+        return practiceSessionResponses;
     }
 
 

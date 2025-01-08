@@ -2,6 +2,8 @@ package com.example.cricketApplication.security.jwt;
 
 import java.security.Key;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +15,8 @@ import com.example.cricketApplication.security.services.UserDetailsImpl;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.security.core.GrantedAuthority;
+
 
 @Component
 public class JwtUtils {
@@ -35,7 +39,26 @@ public class JwtUtils {
         .signWith(key(), SignatureAlgorithm.HS256)
         .compact();
   }
-  
+
+//  public String generateJwtToken(Authentication authentication) {
+//
+//    UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
+//
+//    // Extract roles from userPrincipal
+//    List<String> roles = userPrincipal.getAuthorities().stream()
+//            .map(GrantedAuthority::getAuthority)
+//            .collect(Collectors.toList());
+//
+//    return Jwts.builder()
+//            .setSubject(userPrincipal.getUsername())
+//            .claim("roles", roles) // Add roles to the token claims
+//            .setIssuedAt(new Date())
+//            .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
+//            .signWith(key(), SignatureAlgorithm.HS256)
+//            .compact();
+//  }
+
+
   private Key key() {
     return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret));
   }

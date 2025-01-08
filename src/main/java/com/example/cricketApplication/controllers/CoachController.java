@@ -9,6 +9,7 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,12 +25,14 @@ public class CoachController {
     private CoachService coachService;
 
     @PostMapping("/add")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Coach> addCoach(@RequestBody Coach coach) {
         Coach savedCoach = coachService.addCoach(coach);
         return ResponseEntity.ok(savedCoach);
     }
 
     @GetMapping("/{coachId}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_COACH', 'ROLE_PLAYER', 'ROLE_OFFICIAL')")
     public ResponseEntity<?> getCoachById(@PathVariable Long coachId) {
         try {
             CoachResponse coach = coachService.getCoachById(coachId);
@@ -41,12 +44,14 @@ public class CoachController {
     }
 
     @GetMapping("/all")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_COACH', 'ROLE_PLAYER', 'ROLE_OFFICIAL')")
     public ResponseEntity<List<CoachResponse>> getAllCoaches() {
         List<CoachResponse> coaches = coachService.getAllCoaches();
         return ResponseEntity.ok(coaches);
     }
 
     @GetMapping("/user/{userId}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_COACH', 'ROLE_PLAYER', 'ROLE_OFFICIAL')")
     public ResponseEntity<?> getCoachByUserId(@PathVariable Long userId) {
         Optional<Coach> coach = coachService.getCoachByUserId(userId);
         if (coach.isPresent()) {
@@ -58,12 +63,14 @@ public class CoachController {
     }
 
     @GetMapping("/role/{roleId}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_COACH', 'ROLE_PLAYER', 'ROLE_OFFICIAL')")
     public ResponseEntity<List<Coach>> getCoachesByRoleId(@PathVariable Long roleId) {
         List<Coach> coaches = coachService.getCoachesByRoleId(roleId);
         return ResponseEntity.ok(coaches);
     }
 
     @DeleteMapping("/{coachId}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> deleteCoachById(@PathVariable Long coachId) {
         try {
             coachService.deleteCoachById(coachId);
@@ -88,6 +95,7 @@ public class CoachController {
 //    }
 
     @PutMapping("/{coachId}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<CoachResponse> updateCoach(
             @PathVariable Long coachId,
             @RequestParam("userData") String userData, // Coach details as JSON
@@ -109,4 +117,8 @@ public class CoachController {
 
 
 }
+
+
+
+
 

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,11 +24,13 @@ public class PlayerStatsController {
     private PlayerStatsService playerStatsService;
 
     @PostMapping("/add")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public PlayerStats createPlayerStats(@RequestBody PlayerStats playerStats) {
         return playerStatsService.createPlayerStats(playerStats);
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_COACH', 'ROLE_PLAYER', 'ROLE_OFFICIAL')")
     public ResponseEntity<?> getPlayerStatsById(@PathVariable Long id) {
         Optional<PlayerStats> playerStats = playerStatsService.getPlayerStatsById(id);
         if (playerStats.isPresent()) {
@@ -40,24 +43,28 @@ public class PlayerStatsController {
     }
 
     @GetMapping("/all")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_COACH', 'ROLE_PLAYER', 'ROLE_OFFICIAL')")
     public ResponseEntity<List<PlayerStats>> getAllPlayerStats() {
         List<PlayerStats> playerStatsList = playerStatsService.getAllPlayerStats();
         return ResponseEntity.ok(playerStatsList);
     }
 
     @GetMapping("/player/{playerId}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_COACH', 'ROLE_PLAYER', 'ROLE_OFFICIAL')")
     public ResponseEntity<List<PlayerStats>> getPlayerStatsByPlayerId(@PathVariable Long playerId) {
         List<PlayerStats> playerStatsList = playerStatsService.getPlayerStatsByPlayerId(playerId);
         return ResponseEntity.ok(playerStatsList);
     }
 
     @GetMapping("/match/{matchId}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_COACH', 'ROLE_PLAYER', 'ROLE_OFFICIAL')")
     public ResponseEntity<List<PlayerStats>> getPlayerStatsByMatchId(@PathVariable Long matchId) {
         List<PlayerStats> playerStatsList = playerStatsService.getPlayerStatsByMatchId(matchId);
         return ResponseEntity.ok(playerStatsList);
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> deletePlayerStatsById(@PathVariable Long id) {
         try {
             playerStatsService.deletePlayerStatsById(id);
@@ -82,6 +89,7 @@ public class PlayerStatsController {
 //    }
 
     @GetMapping("/match")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_COACH', 'ROLE_PLAYER', 'ROLE_OFFICIAL')")
     public ResponseEntity<List<PlayerStatsResponse>> getPlayerStatsByMatch(
             @RequestParam("playerId") Long playerId,
             @RequestParam("matchId") Long matchId) {
@@ -91,6 +99,7 @@ public class PlayerStatsController {
     }
 
     @GetMapping("/type")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_COACH', 'ROLE_PLAYER', 'ROLE_OFFICIAL')")
     public ResponseEntity<List<PlayerStatsResponse>> getPlayerStatsByMatchType(
             @RequestParam("playerId") Long playerId,
             @RequestParam("matchType") String matchType) {
@@ -101,6 +110,7 @@ public class PlayerStatsController {
 
     @Cacheable("playerStatCache")
     @GetMapping("/summery")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_COACH', 'ROLE_PLAYER', 'ROLE_OFFICIAL')")
     public ResponseEntity<PlayerStatsResponse> getOverallStatByMatchType(
             @RequestParam("playerId") Long playerId,
             @RequestParam("matchType") String matchType)
@@ -121,6 +131,7 @@ public class PlayerStatsController {
 
 
     @GetMapping("/match/player-stats")
+
     public ResponseEntity<List<PlayerStatsResponse>> getPlayerStatsForMatch(
             @RequestParam("matchId") Long matchId) {
         List<PlayerStatsResponse> playerStatsResponses = playerStatsService.getPlayerStatsForMatch(matchId);
@@ -130,12 +141,14 @@ public class PlayerStatsController {
 
     // New endpoint to get all player stats by player ID
     @GetMapping("/all-stats/{playerId}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_COACH', 'ROLE_PLAYER', 'ROLE_OFFICIAL')")
     public ResponseEntity<List<PlayerStatsResponse>> getAllStatsByPlayerId(@PathVariable Long playerId) {
         List<PlayerStatsResponse> playerStatsResponses = playerStatsService.getAllStatsByPlayerId(playerId);
         return ResponseEntity.ok(playerStatsResponses);
     }
 
     @PutMapping("/update/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> updatePlayerStats(@PathVariable Long id, @RequestBody PlayerStats updatedPlayerStats) {
         try {
             PlayerStats playerStats = playerStatsService.updatePlayerStats(id, updatedPlayerStats);
@@ -148,6 +161,7 @@ public class PlayerStatsController {
     }
 
     @PostMapping("/addMultiple")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public List<PlayerStats> createMultiplePlayerStats(@RequestBody List<PlayerStats> playerStatsList) {
         return playerStatsService.createMultiplePlayerStats(playerStatsList);
     }
@@ -155,3 +169,9 @@ public class PlayerStatsController {
 
 
 }
+
+
+
+
+
+
